@@ -1,0 +1,83 @@
+Register a new user:
+Enter username: xyz
+Enter password: 123
+Registration successful!
+
+Login:
+Enter username: xyz
+Enter password: 123
+Login successful!
+
+
+Expense Tracker Menu:
+1. Add Expense
+2. List Expenses
+3. Show Category-wise Totals
+4. Save Expenses to File
+5. Load Expenses from File
+6. Exit
+Enter your choice: 1
+Enter date (YYYY-MM-DD): 26-11-2024
+Enter category: Food
+Enter amount: 1000
+Expense added successfully!
+
+Expense Tracker Menu:
+1. Add Expense
+2. List Expenses
+3. Show Category-wise Totals
+4. Save Expenses to File
+5. Load Expenses from File
+6. Exit
+Enter your choice: 2
+
+Expenses:
+Date: 26-11-2024, Category: Food, Amount: 1000.0
+
+Expense Tracker Menu:
+1. Add Expense
+2. List Expenses
+3. Show Category-wise Totals
+4. Save Expenses to File
+5. Load Expenses from File
+6. Exit
+Enter your choice: 3
+
+Category-wise Totals:
+Food: 1000.0
+
+Expense Tracker Menu:
+1. Add Expense
+2. List Expenses
+3. Show Category-wise Totals
+4. Save Expenses to File
+5. Load Expenses from File
+6. Exit
+Enter your choice: 4
+Enter file name to save expenses: expenses.txt
+Expenses saved to expenses.txt
+
+Expense Tracker Menu:
+1. Add Expense
+2. List Expenses
+3. Show Category-wise Totals
+4. Save Expenses to File
+5. Load Expenses from File
+6. Exit
+Enter your choice: 5
+Enter file name to load expenses: expenses.txt
+Expenses loaded from expenses.txt
+
+Expense Tracker Menu:
+1. Add Expense
+2. List Expenses
+3. Show Category-wise Totals
+4. Save Expenses to File
+5. Load Expenses from File
+6. Exit
+Enter your choice: 6
+Exiting Expense Tracker. Goodbye!
+
+
+...Program finished with exit code 0
+Press ENTER to exit console.
