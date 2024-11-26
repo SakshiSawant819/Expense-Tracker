@@ -1,0 +1,209 @@
+import java.io.*;
+import java.util.*;
+
+public class ExpenseTracker {
+
+    // Class to handle user registration and login
+    static class User {
+        private String username;
+        private String password;
+
+        public User(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        public boolean login(String inputUsername, String inputPassword) {
+            return this.username.equals(inputUsername) && this.password.equals(inputPassword);
+        }
+    }
+
+    // Class to represent an Expense
+    static class Expense {
+        private String date;
+        private String category;
+        private double amount;
+
+        public Expense(String date, String category, double amount) {
+            this.date = date;
+            this.category = category;
+            this.amount = amount;
+        }
+
+        public String getCategory() {
+            return category;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        @Override
+        public String toString() {
+            return "Date: " + date + ", Category: " + category + ", Amount: " + amount;
+        }
+    }
+
+    // Class to manage expenses
+    static class ExpenseManager {
+        private List<Expense> expenses;
+
+        public ExpenseManager() {
+            expenses = new ArrayList<>();
+        }
+
+        // Add an expense
+        public void addExpense(Expense expense) {
+            expenses.add(expense);
+        }
+
+        // List all expenses
+        public void listExpenses() {
+            if (expenses.isEmpty()) {
+                System.out.println("No expenses recorded yet.");
+                return;
+            }
+            System.out.println("\nExpenses:");
+            for (Expense expense : expenses) {
+                System.out.println(expense);
+            }
+        }
+
+        // Show category-wise totals
+        public void showCategoryWiseSummation() {
+            Map<String, Double> categoryTotals = new HashMap<>();
+            for (Expense expense : expenses) {
+                categoryTotals.put(expense.getCategory(),
+                        categoryTotals.getOrDefault(expense.getCategory(), 0.0) + expense.getAmount());
+            }
+
+            System.out.println("\nCategory-wise Totals:");
+            for (Map.Entry<String, Double> entry : categoryTotals.entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
+        }
+
+        // Save expenses to a file
+        public void saveExpensesToFile(String fileName) throws IOException {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+                for (Expense expense : expenses) {
+                    writer.write(expense.toString() + "\n");
+                }
+            }
+            System.out.println("Expenses saved to " + fileName);
+        }
+
+        // Load expenses from a file
+        public void loadExpensesFromFile(String fileName) throws IOException {
+            try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(", ");
+                    String date = parts[0].split(": ")[1];
+                    String category = parts[1].split(": ")[1];
+                    double amount = Double.parseDouble(parts[2].split(": ")[1]);
+                    expenses.add(new Expense(date, category, amount));
+                }
+            }
+            System.out.println("Expenses loaded from " + fileName);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ExpenseManager expenseManager = new ExpenseManager();
+        User user = null;
+
+        try {
+            // User registration
+            System.out.println("Register a new user:");
+            System.out.print("Enter username: ");
+            String username = scanner.nextLine();
+            System.out.print("Enter password: ");
+            String password = scanner.nextLine();
+            user = new User(username, password);
+            System.out.println("Registration successful!\n");
+
+            // User login
+            System.out.println("Login:");
+            System.out.print("Enter username: ");
+            String inputUsername = scanner.nextLine();
+            System.out.print("Enter password: ");
+            String inputPassword = scanner.nextLine();
+
+            if (!user.login(inputUsername, inputPassword)) {
+                System.out.println("Invalid credentials. Exiting program.");
+                return;
+            }
+
+            System.out.println("Login successful!\n");
+
+            // Main menu
+            while (true) {
+                System.out.println("\nExpense Tracker Menu:");
+                System.out.println("1. Add Expense");
+                System.out.println("2. List Expenses");
+                System.out.println("3. Show Category-wise Totals");
+                System.out.println("4. Save Expenses to File");
+                System.out.println("5. Load Expenses from File");
+                System.out.println("6. Exit");
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+                switch (choice) {
+                    case 1: // Add Expense
+                        System.out.print("Enter date (YYYY-MM-DD): ");
+                        String date = scanner.nextLine();
+                        System.out.print("Enter category: ");
+                        String category = scanner.nextLine();
+                        System.out.print("Enter amount: ");
+                        double amount = scanner.nextDouble();
+                        scanner.nextLine(); // Consume newline
+                        expenseManager.addExpense(new Expense(date, category, amount));
+                        System.out.println("Expense added successfully!");
+                        break;
+
+                    case 2: // List Expenses
+                        expenseManager.listExpenses();
+                        break;
+
+                    case 3: // Show Category-wise Totals
+                        expenseManager.showCategoryWiseSummation();
+                        break;
+
+                    case 4: // Save Expenses
+                        System.out.print("Enter file name to save expenses: ");
+                        String saveFile = scanner.nextLine();
+                        try {
+                            expenseManager.saveExpensesToFile(saveFile);
+                        } catch (IOException e) {
+                            System.out.println("Error saving to file: " + e.getMessage());
+                        }
+                        break;
+
+                    case 5: // Load Expenses
+                        System.out.print("Enter file name to load expenses: ");
+                        String loadFile = scanner.nextLine();
+                        try {
+                            expenseManager.loadExpensesFromFile(loadFile);
+                        } catch (IOException e) {
+                            System.out.println("Error loading from file: " + e.getMessage());
+                        }
+                        break;
+
+                    case 6: // Exit
+                        System.out.println("Exiting Expense Tracker. Goodbye!");
+                        return;
+
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        } finally {
+            scanner.close();
+        }
+    }
+}
